@@ -1,0 +1,5 @@
+*.CR3
+*.cr3
+__pycache__/
+*.pyc
+.vscode/
