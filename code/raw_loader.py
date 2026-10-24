@@ -13,7 +13,7 @@ def load_green(path):
     # subtract black level
     img-=black
 
-    #seperate green channel and check if pattern is RGGB
+    #seperate green channel checks for 2*2 Bayer pattern
     greens=[(r, c) for r in range(2) for c in range(2)
             if pattern[r, c] in (1, 3)]
     if len(greens) != 2:
@@ -31,7 +31,7 @@ def load_green(path):
     g2 = g2[:h, :w]
 
     #returns avg of both and also the white level
-    return 0.5 * (g1 + g2), white
+    return 0.5 * (g1 + g2), white-black
 
 if __name__ == "__main__":
     import sys
