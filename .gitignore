@@ -1,5 +1,8 @@
 *.CR3
 *.cr3
+config.json
+data/
+
 __pycache__/
 *.pyc
 .vscode/
