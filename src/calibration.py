@@ -1,6 +1,6 @@
 #Calibrates lights with darks flats and flat darks
 import numpy as np
-from raw_loader import load_green
+from src.raw_loader import load_green
 
 #Creates master from the median or mean of green channels of frames
 def make_master(paths, method="median"):
