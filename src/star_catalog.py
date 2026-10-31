@@ -7,7 +7,7 @@ from astropy.io import fits
 import astropy.units as u
 from astropy.coordinates import SkyCoord
 from astroquery.vizier import Vizier
-from airmass import *
+from src.airmass import *
 
 #Calculate star positions on image from axy.fits
 def read_axy(path):
