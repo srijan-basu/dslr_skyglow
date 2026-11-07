@@ -29,11 +29,12 @@ def fetch_tycho(ra_deg, dec_deg, radius_deg, vt_max, cache_dir):
         return Table.read(cache_path, format="ascii.ecsv")
 
     v = Vizier(
-        columns=['*'],
+        columns=["TYC1", "TYC2", "TYC3", "RA(ICRS)", "DE(ICRS)", "BTmag", "VTmag"],
         column_filters={"VTmag": f"<{vt_max}"},         
         row_limit=-1,                                    
     )
     v.TIMEOUT = 120
+    v.VIZIER_SERVER= "vizier.cfa.harvard.edu"
     res = v.query_region(SkyCoord(ra_deg * u.deg, dec_deg * u.deg), radius=radius_deg * u.deg, catalog="I/259/tyc2")
     if len(res) == 0:
         raise RuntimeError("Vizier returned no Tycho-2 stars.")
@@ -41,7 +42,7 @@ def fetch_tycho(ra_deg, dec_deg, radius_deg, vt_max, cache_dir):
     return res[0]
 
 #Building the star catalog
-def build_star_catalog(axy_path, wcs_path, obs_time_utc, site, cache_dir="data/catalog_cache", mag_min=5, mag_max=10, match_px=4.0, 
+def build_star_catalog(axy_path, wcs_path, obs_time_utc, site, cache_dir="data/catalog_cache", mag_min=3, mag_max=6, match_px=4.0, 
                        n_brightest=400,min_alt_deg=30.0, crowd_px=16.0):
 
     #Read wcs.fits   
