@@ -1,11 +1,24 @@
 #Read a CR3 file and return the green channel  
 import numpy as np
 import rawpy
+from pathlib import Path
 
+#Returns the gren binned image and usable saturation level
 def load_green(path):
-    # read raw an extracting required values
-    with rawpy.imread(path) as raw:
+    # Reading raw file even if input is path object
+    path_str = str(path) if isinstance(path, Path) else path
+    with rawpy.imread(path_str) as raw:
         img=raw.raw_image_visible.astype(np.float64)
+        s=raw.sizes
+
+        #Canon applies a default crop of 6000*4000 for JPEG images used for astrometry.net plate solve.
+        #raw_image_visible returns 6024*4020 therefore we need to apply the crop here as well
+        dx = s.crop_left_margin-s.left_margin
+        dy = s.crop_top_margin-s.top_margin
+        if(dx%2!=0 or dy%2!=0):
+            raise ValueError(f"Crop offset ({dx}, {dy}) is odd, which would swap the Bayer pattern")
+        img = img[dy: dy+s.crop_height, dx: dx+s.crop_width]
+        
         pattern=raw.raw_pattern
         black=float(np.mean(raw.black_level_per_channel))
         white=float(raw.white_level)
